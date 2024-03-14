@@ -1,0 +1,15 @@
+.vscode/
+/node_modules/
+/build/
+/lib/
+/dist/
+/docs/
+/mocks/test-data.tsv
+.idea/*
+
+.DS_Store
+coverage
+*.log
+.env
+
+/upload/
