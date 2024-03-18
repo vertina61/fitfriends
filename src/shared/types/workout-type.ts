@@ -1,6 +1,5 @@
 import { GenderWorkoutType } from "./gender-workout-type.enum.js";
 import { TrainingType } from "./training-type.enum.js";
-import { TrenerType } from "./trener-type.js";
 import { UserLevelType } from "./user-level-type.enum.js";
 
 export type WorkoutType = {
@@ -14,6 +13,6 @@ export type WorkoutType = {
   description: string;
   gender: GenderWorkoutType;
   video: string;
-  trener: TrenerType;
+  rating: number;
 
 }

@@ -3,7 +3,7 @@ import { UserLevelType } from "./user-level-type.enum.js";
 
 export type TrenerType = {
   training_level: UserLevelType;
-  training_type: TrainingType;
+  trainings_type: TrainingType;
   certificates: string;
   merits: string;
 }
