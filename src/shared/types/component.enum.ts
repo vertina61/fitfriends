@@ -8,6 +8,7 @@ export const Component = {
   WorkoutService: Symbol.for('WorkoutService'),
   WorkoutModel: Symbol.for('WorkoutModel'),
   ExceptionFilter: Symbol.for('ExceptionFilter'),
+  UserController: Symbol.for('UserController'),
   AuthService: Symbol.for('AuthService'),
   AuthExceptionFilter: Symbol.for('AuthExceptionFilter'),
 } as const;

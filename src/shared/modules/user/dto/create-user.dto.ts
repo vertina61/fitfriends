@@ -7,10 +7,10 @@ export class CreateUserDto {
   name: string;
   email: string;
   avatar: string;
-  gender: GenderType;
+  pol: GenderType;
   date_of_birth: Date;
-  description: string;
+  about_me: string;
   location: LocationType;
-  image_for_page: string;
+  image_page: string;
   password: string;
 }

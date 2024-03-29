@@ -26,34 +26,34 @@ export class BaseUserEntity extends defaultClasses.TimeStamps implements Users {
   @prop({ required: true, default: '' })
   private password?: string;
 
-  @prop({ required: true, default: '' })
+  @prop()
   public avatar: string;
 
-  @prop({
-    gender: () => String,
+  @prop({ required: true,
+    pol: () => String,
     enum: GenderType
   })
-  public gender!: GenderType;
+  public pol!: GenderType;
 
   @prop()
   public date_of_birth!: Date;
 
-  @prop({
+  @prop({ required: true,
     user_type: () => String,
   })
   public user_type!: UserRolType;
 
   @prop({trim: true})
-  public description!: string;
+  public about_me!: string;
 
-  @prop({
+  @prop({required: true,
     location: () => String,
     enum: LocationType
   })
   public location!: LocationType;
 
-  @prop()
-  public image_for_page!: string;
+  @prop({ required: true})
+  public image_page!: string;
 
 
   constructor(userData: Users) {
@@ -62,12 +62,12 @@ export class BaseUserEntity extends defaultClasses.TimeStamps implements Users {
     this.name = userData.name;
     this.email = userData.email;
     this.avatar = userData.avatar;
-    this.gender = userData.gender;
+    this.pol = userData.pol;
     this.date_of_birth = userData.date_of_birth;
     this.user_type = userData.user_type;
-    this.description = userData.description;
+    this.about_me = userData.about_me;
     this.location = userData.location;
-    this.image_for_page = userData.image_for_page;
+    this.image_page = userData.image_page;
 
   }
 

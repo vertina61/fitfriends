@@ -5,7 +5,7 @@ import { Config, RestSchema } from '../shared/libs/config/index.js';
 import { Component } from '../shared/types/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import { getMongoURI } from '../shared/helpers/index.js';
-import { ExceptionFilter } from '../shared/libs/rest/index.js';
+import { ExceptionFilter, Controller, } from '../shared/libs/rest/index.js';
 import { ParseTokenMiddleware } from '../shared/libs/rest/middleware/parse-token.middleware.js';
 
 @injectable()
@@ -17,6 +17,7 @@ export class RestApplication {
     @inject(Component.Config) private readonly config: Config<RestSchema>,
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
     @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
+    @inject(Component.UserController) private readonly userController: Controller,
     @inject(Component.AuthExceptionFilter) private readonly authExceptionFilter: ExceptionFilter,
   ) {
     this.server = express();
@@ -38,6 +39,10 @@ export class RestApplication {
     const port = this.config.get('PORT');
     this.server.listen(port);
   }
+
+  private async _initControllers() {
+    this.server.use('/users', this.userController.router);
+      }
 
   private async _initMiddleware() {
     const authenticateMiddleware = new ParseTokenMiddleware(this.config.get('JWT_SECRET'));
@@ -61,6 +66,10 @@ export class RestApplication {
     this.logger.info('Init app-level middleware');
     await this._initMiddleware();
     this.logger.info('App-level middleware initialization completed');
+
+    this.logger.info('Init controllers');
+    await this._initControllers();
+    this.logger.info('Controller initialization completed');
 
     this.logger.info('Init exception filters');
     await this._initExceptionFilters();
