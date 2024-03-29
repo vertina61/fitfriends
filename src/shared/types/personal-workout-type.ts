@@ -1,10 +1,11 @@
 import { CustomerType } from "./customer-type.enum.js";
 import { StatusType } from "./status-type.enum.js";
-import { UserType } from "./user-type.enum.js";
+import { UserRolType } from "./user-rol.type.js";
+
 
 export type PersonalWorkoutType = {
   initiator: CustomerType;
-  user: UserType;
+  user: UserRolType;
   status: StatusType;
 
 }

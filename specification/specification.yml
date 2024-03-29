@@ -1,0 +1,114 @@
+openapi: 3.0.1
+info:
+  title: API сервер для демо-проекта «FITFRIENDS».
+  description: |-
+    * Список ресурсов и маршрутов сервера «FITFRIENDS».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: workouts
+    description: Действия с тренировками.
+  - name: users
+    description: Действия с пользователем.
+
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя.
+      requestBody:
+        description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "409":
+          description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизация пользователя
+      description: Авторизует пользователя на основе логина и пароля.
+      responses:
+        '200':
+          description: Пользователь успешно авторизирован.
+          content:
+            text/plain:
+              schema:
+               $ref: '#/components/schemas/user'
+        '401':
+          description: Данный пользователь не найден.
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию по авторизованному пользователю
+      responses:
+        '200':
+          description: Пользователь успешно авторизирован.
+          content:
+            text/plain:
+              schema:
+               $ref: '#/components/schemas/user'
+        '401':
+          description: Пользователь не авторизирован.
+
+
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Завершение сеанса пользователя
+      description: Завершает сеанс авторизованного пользователя.
+      responses:
+        '204':
+          description: Сессия успешно завершена.
+
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+
+        name:
+          type: string
+          example: Vera
+
+        email:
+          type: string
+          example: verka@gmail.com
+
+        password:
+          type: string
+          example: 123456
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        email:
+          type: string
+          example: verka@gmail.com
+
