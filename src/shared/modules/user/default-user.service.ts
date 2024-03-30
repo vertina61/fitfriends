@@ -43,4 +43,10 @@ export class DefaultUserService implements UserService {
       .findByIdAndUpdate(userId, dto, { new: true })
       .exec();
   }
+
+  public async find(): Promise<DocumentType<BaseUserEntity>[]> {
+    return this.userModel
+      .find()
+      .exec();
+}
 }

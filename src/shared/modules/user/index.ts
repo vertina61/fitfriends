@@ -6,3 +6,4 @@ export * from './dto/create-trener-user.dto.js';
 export * from './dto/create-user.dto.js';
 export * from '../../types/user-rol.type.js';
 export * from './user.container.js';
+export * from './type/param-userid.type.js';
