@@ -49,4 +49,10 @@ export class DefaultUserService implements UserService {
       .find()
       .exec();
 }
+
+public async findById(userId: string): Promise<DocumentType<BaseUserEntity> | null> {
+  return this.userModel
+    .findById(userId)
+    .exec();
+}
 }

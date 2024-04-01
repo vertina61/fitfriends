@@ -1,6 +1,6 @@
 # Пользователи
 
-# Получить список пользователей (только авторизированные)
+# Получить список пользователей (только авторизированные с ролью Пользователь)
 GET http://localhost:4000/users HTTP/1.1
 Content-Type: application/json
 ###
@@ -10,12 +10,12 @@ POST http://localhost:4000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "TOR@overlook.net",
-  "name": "Jack123",
+  "name": "ИВАн",
+  "email": "ivana1@overlook.net",
   "avatar": "avatar.png",
   "pol": "Женский",
   "user_type": "Тренер",
-  "about_me": "Просто хорорший человек",
+  "about_me": "Просто хороший человек",
   "location": "Петроградская",
   "image_page": "image.jpg",
   "password": "shining"
@@ -43,8 +43,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IlRPUkBvdmVybG9vay5uZXQiL
 
 ###
 
-# Получить детальную информацию по пользователю (могут все)
-GET http://localhost:4000/users/65530e30a6380c83ba723099 HTTP/1.1
+# Получить детальную информацию по пользователю (авторизированные)
+GET http://localhost:4000/users/6606a09b7da0a2ee8ae6e591 HTTP/1.1
 
 ###
 

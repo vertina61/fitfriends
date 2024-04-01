@@ -23,6 +23,7 @@ import { AuthService } from '../auth/index.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { ParamUserId } from './index.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
+import { DetailUserRdo } from './rdo/detail-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -39,6 +40,9 @@ export class UserController extends BaseController {
     this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateUserDto)] });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)] });
     this.addRoute({ path: '/login', method: HttpMethod.Get,  handler: this.checkAuthenticate});
+    this.addRoute({ path: '/:userId', method: HttpMethod.Get, handler: this.show, middlewares: [
+      new ValidateObjectIdMiddleware('userId'),
+          ] });
     this.addRoute({ path: '/:userId', method: HttpMethod.Patch, handler: this.update, middlewares: [new PrivateRouteMiddleware(),new ValidateObjectIdMiddleware('userId'),new ValidateDtoMiddleware(UpdateUserDto)] });
   }
 
@@ -100,4 +104,12 @@ export class UserController extends BaseController {
 
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
   }
+  public async show({ params: {userId} }: Request<ParamUserId>, res: Response): Promise<void> {
+    const user = await this.userService.findById(userId);
+    this.ok(res, fillDTO(DetailUserRdo, user));
+
+  }
+
+
+
 }
