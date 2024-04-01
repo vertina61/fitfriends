@@ -8,4 +8,6 @@ export interface UserService {
   findByEmail(email: string): Promise<DocumentType<BaseUserEntity> | null>;
   findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<BaseUserEntity>>;
   updateById(userId: string, dto: UpdateUserDto): Promise<DocumentType<BaseUserEntity> | null>;
+  find(): Promise<DocumentType<BaseUserEntity>[]>;
+  findById(userId: string): Promise<DocumentType<BaseUserEntity> | null>;
 }

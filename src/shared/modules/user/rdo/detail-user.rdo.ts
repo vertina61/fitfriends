@@ -1,9 +1,9 @@
 import { Expose } from 'class-transformer';
-import { UserRolType } from '../index.js';
 import { GenderType } from '../../../types/gender-type.enum.js';
 import { LocationType } from '../../../types/location-type.enum.js';
+import { UserRolType } from '../index.js';
 
-export class UserRdo {
+export class DetailUserRdo {
   @Expose()
   user_type: UserRolType;
 
@@ -30,5 +30,4 @@ export class UserRdo {
 
   @Expose()
   image_page: string;
-
 }

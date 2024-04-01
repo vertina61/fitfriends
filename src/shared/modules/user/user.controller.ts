@@ -1,11 +1,13 @@
 import { inject, injectable } from 'inversify';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   BaseController,
   HttpError,
   HttpMethod,
+  PrivateRouteMiddleware,
   ValidateDtoMiddleware,
+  ValidateObjectIdMiddleware,
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -19,6 +21,9 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { AuthService } from '../auth/index.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
+import { ParamUserId } from './index.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
+import { DetailUserRdo } from './rdo/detail-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -31,9 +36,20 @@ export class UserController extends BaseController {
     super(logger);
     this.logger.info('Register routes for UserController…');
 
+    this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
     this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateUserDto)] });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)] });
+    this.addRoute({ path: '/login', method: HttpMethod.Get,  handler: this.checkAuthenticate});
+    this.addRoute({ path: '/:userId', method: HttpMethod.Get, handler: this.show, middlewares: [
+      new ValidateObjectIdMiddleware('userId'),
+          ] });
+    this.addRoute({ path: '/:userId', method: HttpMethod.Patch, handler: this.update, middlewares: [new PrivateRouteMiddleware(),new ValidateObjectIdMiddleware('userId'),new ValidateDtoMiddleware(UpdateUserDto)] });
+  }
 
+
+  public async index(_req: Request, res: Response) {
+    const users = await this.userService.find();
+    this.ok(res, fillDTO(UserRdo, users));
   }
 
   public async create(
@@ -54,6 +70,13 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
+
+  public async update({ body, params }: Request<ParamUserId, unknown, UpdateUserDto>, res: Response): Promise<void> {
+    const updatedUser = await this.userService.updateById(params.userId, body);
+
+    this.ok(res, fillDTO(UserRdo, updatedUser));
+  }
+
   public async login(
     { body }: LoginUserRequest,
     res: Response,
@@ -66,5 +89,27 @@ export class UserController extends BaseController {
     });
     this.ok(res, responseData);
   }
+
+
+  public async checkAuthenticate({ tokenPayload: { email }}: Request, res: Response) {
+    const foundedUser = await this.userService.findByEmail(email);
+
+    if (! foundedUser) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized',
+        'UserController'
+      );
+    }
+
+    this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
+  }
+  public async show({ params: {userId} }: Request<ParamUserId>, res: Response): Promise<void> {
+    const user = await this.userService.findById(userId);
+    this.ok(res, fillDTO(DetailUserRdo, user));
+
+  }
+
+
 
 }
