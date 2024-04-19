@@ -25,7 +25,6 @@ export class DefaultAuthService implements AuthService {
     const tokenPayload: TokenPayload = {
       email: user.email,
       name: user.name,
-      id: user.id,
     };
 
     this.logger.info(`Create token for ${user.email}`);

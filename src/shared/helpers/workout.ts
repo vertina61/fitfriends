@@ -1,11 +1,11 @@
 
-import { GenderType } from "../types/gender-type.enum.js";
 import { GenderWorkoutType } from "../types/gender-workout-type.enum.js";
-import { LocationType } from "../types/location-type.enum.js";
 import { TrainingType } from "../types/training-type.enum.js";
 import { UserLevelType } from "../types/user-level-type.enum.js";
 import { WorkoutType } from "../types/workout-type.js";
 import { UserRolType } from "../types/user-rol.type.js";
+import { GenderType } from "../types/gender-type.enum.js";
+import { LocationType } from "../types/location-type.enum.js";
 
 export function createWorkout(workoutData: string): WorkoutType {
     const [
@@ -29,7 +29,7 @@ export function createWorkout(workoutData: string): WorkoutType {
       about_me,
       location,
       image_page,
-        ] = workoutData.replace('\n', '').split('\t');
+      ] = workoutData.replace('\n', '').split('\t');
 
     return {
         title,
@@ -44,13 +44,14 @@ export function createWorkout(workoutData: string): WorkoutType {
         video,
         rating:Number.parseInt(rating, 10),
         user: {name,
-        email,
-        avatar,
-        pol: GenderType[pol as 'Женский' | 'Мужской' | 'Неважно'],
-        date_of_birth: new Date(date_of_birth),
-        user_type: UserRolType[user_type as 'Пользователь' | 'Тренер'],
-        about_me,
-        location: LocationType[location as 'Пионерская' | 'Петроградская' | 'Удельная' | 'Звездная' | 'Спортивная'],
-        image_page,}
-          };
-    }
+          email,
+          avatar,
+          pol: GenderType[pol as 'Женский' | 'Мужской' | 'Неважно'],
+          date_of_birth: new Date(date_of_birth),
+          user_type: UserRolType[user_type as 'Пользователь' | 'Тренер'],
+          about_me,
+          location: LocationType[location as 'Пионерская' | 'Петроградская' | 'Удельная' | 'Звездная' | 'Спортивная'],
+          image_page,}
+        };
+          }
+

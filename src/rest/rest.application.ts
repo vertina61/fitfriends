@@ -19,6 +19,7 @@ export class RestApplication {
     @inject(Component.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
     @inject(Component.UserController) private readonly userController: Controller,
     @inject(Component.AuthExceptionFilter) private readonly authExceptionFilter: ExceptionFilter,
+    @inject(Component.WorkoutController) private readonly workoutController: Controller,
   ) {
     this.server = express();
   }
@@ -42,6 +43,7 @@ export class RestApplication {
 
   private async _initControllers() {
     this.server.use('/users', this.userController.router);
+    this.server.use('/workouts', this.workoutController.router);
       }
 
   private async _initMiddleware() {

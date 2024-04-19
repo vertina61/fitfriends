@@ -10,7 +10,7 @@ import {
   ValidateObjectIdMiddleware,
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
-import { Component } from '../../types/index.js';
+import { Component} from '../../types/index.js';
 import { CreateUserRequest } from './create-user-request.type.js';
 import { UserService } from './user-service.interface.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
@@ -37,13 +37,14 @@ export class UserController extends BaseController {
     this.logger.info('Register routes for UserController…');
 
     this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-    this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateUserDto)] });
+    this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateUserDto), ] });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)] });
     this.addRoute({ path: '/login', method: HttpMethod.Get,  handler: this.checkAuthenticate});
     this.addRoute({ path: '/:userId', method: HttpMethod.Get, handler: this.show, middlewares: [
       new ValidateObjectIdMiddleware('userId'),
           ] });
     this.addRoute({ path: '/:userId', method: HttpMethod.Patch, handler: this.update, middlewares: [new PrivateRouteMiddleware(),new ValidateObjectIdMiddleware('userId'),new ValidateDtoMiddleware(UpdateUserDto)] });
+
   }
 
 

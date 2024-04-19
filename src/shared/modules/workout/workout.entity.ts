@@ -1,5 +1,5 @@
 import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
-import { BaseUserEntity } from '../user/index.js';
+import { BaseUserEntity, UserRolType } from '../user/index.js';
 import { UserLevelType } from '../../types/user-level-type.enum.js';
 import { TrainingType } from '../../types/training-type.enum.js';
 import { GenderWorkoutType } from '../../types/gender-workout-type.enum.js';
@@ -62,6 +62,16 @@ export class WorkoutEntity extends defaultClasses.TimeStamps {
     required: true
   })
   public userId!: Ref<BaseUserEntity>;
+
+
+  @prop({
+    user_type: () => String,
+    enum: UserRolType,
+    default: UserRolType.Тренер,
+  })
+  public user_type!: UserRolType.Тренер;
+
 }
+
 
 export const WorkoutModel = getModelForClass(WorkoutEntity);
