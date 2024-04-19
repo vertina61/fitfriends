@@ -3,6 +3,7 @@ import { TrainingType } from "./training-type.enum.js";
 import { UserLevelType } from "./user-level-type.enum.js";
 import { Users } from "./users.type.js";
 
+
 export type WorkoutType = {
   title: string;
   image_for_page: string;

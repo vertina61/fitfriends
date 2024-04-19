@@ -1,0 +1,47 @@
+# Список предложений
+## Получить список предложений (могут все)
+GET http://localhost:4000/workouts HTTP/1.1
+Content-Type: application/json
+
+###
+## Создать новую тренировку (только авторизованные с ролью тренер)
+POST http://localhost:4000/workouts HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IlRPUkBvdmVybG9vay5uZXQiLCJuYW1lIjoiVmVlcmEiLCJpZCI6IjY2MDZhMDliN2RhMGEyZWU4YWU2ZTU5MSIsImlhdCI6MTcxMjA2NDIwMCwiZXhwIjoxNzEyMjM3MDAwfQ.hYzQkeZMrZU8FinlAf09K6eAi6FvanrTH-EdqtyDD-U
+
+{
+  "title": "RRRRRRRRRRRRRR",
+  "image_for_page": "av2.png",
+  "user_level": "Новичок",
+  "training_type": "Йога",
+  "training_time": "10 минут",
+  "price": 1200,
+  "callories": 1,
+  "description": "descriptiondescriptiondescriptiondescription",
+  "gender": "Для женщин",
+  "video": "av2.png",
+  "price": 12000,
+  "rating": 0,
+  "userId": "6606a09b7da0a2ee8ae6e591"
+}
+
+###
+# Получить детальную информацию по предложению (могут все)
+GET http://localhost:4000/workouts/6606955c7b00d866e3703588 HTTP/1.1
+
+###
+
+
+## Обновить объявление (только свои)
+
+PATCH http://localhost:4000/workouts/65530e30a6380c83ba723099 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IlRPUkBvdmVybG9vay5uZXQiLCJmaXJzdG5hbWUiOiJKYWNrMTIzIiwiaWQiOiI2NTUzMGRmZWE2MzgwYzgzYmE3MjMwOTYiLCJpYXQiOjE2OTk5NDE5MDIsImV4cCI6MTcwMDExNDcwMn0.6GwM3YDm2za2YyXCrbztA1MM6pe_iiZeHe3euvWDvNM
+
+{
+  "title": "Дом Дом Дом Дом",
+  "description": "Дом как дом Дом как домДом как домДом как домДом как дом",
+  "price": 100
+}
+
+###

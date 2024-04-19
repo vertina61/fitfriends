@@ -1,18 +1,19 @@
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/index.js';
-import { SortType } from '../../types/sort-type.enum.js';
 import { Logger } from '../../libs/logger/index.js';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { WorkoutEntity } from './workout.entity.js';
 import { CreateWorkoutDto } from './dto/create-workout.dto.js';
 import { DEFAULT_WORKOUT_COUNT } from './workout.constant.js';
 import { WorkoutService } from './workout-service.interface.js';
+//import { BaseUserEntity } from '../user/base-user.entity.js';
 
 @injectable()
 export class DefaultWorkoutService implements WorkoutService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
-    @inject(Component.WorkoutModel) private readonly workoutModel: types.ModelType<WorkoutEntity>
+    @inject(Component.WorkoutModel) private readonly workoutModel: types.ModelType<WorkoutEntity>,
+    //@inject(Component.UserModel) private readonly userModel: types.ModelType<BaseUserEntity>
   ) {}
 
   public async create(dto: CreateWorkoutDto): Promise<DocumentType<WorkoutEntity>> {
@@ -23,7 +24,10 @@ export class DefaultWorkoutService implements WorkoutService {
   }
 
   public async findById(workoutId: string): Promise<DocumentType<WorkoutEntity> | null> {
-    return this.workoutModel.findById(workoutId).exec();
+    return this.workoutModel
+    .findById(workoutId)
+    .populate(['userId'])
+    .exec();
   }
 
   public async find(): Promise<DocumentType<WorkoutEntity>[]> {
@@ -31,13 +35,6 @@ export class DefaultWorkoutService implements WorkoutService {
       .find()
       .populate('userId')
       .limit(DEFAULT_WORKOUT_COUNT)
-      .sort({ createdAt: SortType.Down })
-      .exec();
-  }
-
-    public async deleteById(workoutId: string): Promise<DocumentType<WorkoutEntity> | null> {
-    return this.workoutModel
-      .findByIdAndDelete(workoutId)
       .exec();
   }
 
@@ -47,25 +44,4 @@ export class DefaultWorkoutService implements WorkoutService {
   }
 
 
-  public async getDetailedWorkout(workoutId: string, userId?: string): Promise<DocumentType<WorkoutEntity> | null> {
-    let result = await this.workoutModel.aggregate<DocumentType<WorkoutEntity>>([
-      { $match: { $expr: { $eq: [workoutId, { $toString: '$_id'}] } } },
-      {
-        $lookup: {
-          from: 'users',
-          pipeline: [
-            { $match: { $expr: { $eq: [userId, { $toString: '$_id'}] } } },
-            { $project: {_id: false}}
-          ],
-          as: 'user'
-        }
-      },
-      { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
-      { $unset: 'user' },
-    ]).exec();
-    result = await this.workoutModel.populate(result, {path: 'userId'});
-    const workout = result[0];
-    return workout;
-  }
-
-}
+ }
