@@ -12,6 +12,7 @@ export type RestSchema = {
   DB_PORT: string;
   DB_NAME: string;
   JWT_SECRET: string;
+  JWT_SECRET_REFRESH: string;
 }
 
 export const configRestSchema = convict<RestSchema>({
@@ -61,6 +62,12 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Secret for sign JWT',
     format: String,
     env: 'JWT_SECRET',
+    default: null
+  },
+  JWT_SECRET_REFRESH: {
+    doc: 'Secret for sign JWT',
+    format: String,
+    env: 'JWT_SECRET_REFRESH',
     default: null
   },
 });

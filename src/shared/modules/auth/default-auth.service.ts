@@ -9,7 +9,7 @@ import { LoginUserDto } from '../user/dto/login-user.dto.js';
 import { TokenPayload } from './types/TokenPlayload.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { UserNotFoundException, UserPasswordIncorrectException } from './errors/index.js';
-import { JWT_ALGORITHM, JWT_EXPIRED } from './auth.constant.js';
+import { JWT_ALGORITHM, JWT_EXPIRED, JWT_EXPIRED_REFRESH } from './auth.constant.js';
 
 @injectable()
 export class DefaultAuthService implements AuthService {
@@ -25,6 +25,7 @@ export class DefaultAuthService implements AuthService {
     const tokenPayload: TokenPayload = {
       email: user.email,
       name: user.name,
+      id: user.id,
     };
 
     this.logger.info(`Create token for ${user.email}`);
@@ -32,6 +33,23 @@ export class DefaultAuthService implements AuthService {
       .setProtectedHeader({ alg: JWT_ALGORITHM })
       .setIssuedAt()
       .setExpirationTime(JWT_EXPIRED)
+      .sign(secretKey);
+  }
+
+  public async refresh(user: BaseUserEntity): Promise<string> {
+    const jwtSecret = this.config.get('JWT_SECRET_REFRESH');
+    const secretKey = crypto.createSecretKey(jwtSecret, 'utf-8');
+    const tokenPayload: TokenPayload = {
+      email: user.email,
+      name: user.name,
+      id: user.id,
+    };
+
+    this.logger.info(`Create token for ${user.email}`);
+    return new SignJWT(tokenPayload)
+      .setProtectedHeader({ alg: JWT_ALGORITHM })
+      .setIssuedAt()
+      .setExpirationTime(JWT_EXPIRED_REFRESH)
       .sign(secretKey);
   }
 
